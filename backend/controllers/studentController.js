@@ -1,7 +1,7 @@
 const studentModel = require('../models/student');
 
 // Create a new student
-const resgiterStudent = async (req, res) => {
+const registerStudent = async (req, res) => {
     try {
         const {  studentName, studentEmail, studentPhone, studentAddress, studentGender } = req.body;
 
@@ -103,4 +103,4 @@ const deleteStudent = async (req, res) => {
 }
 
 
-module.exports = { resgiterStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent };
+module.exports = { registerStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent };

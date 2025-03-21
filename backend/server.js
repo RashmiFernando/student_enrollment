@@ -36,5 +36,4 @@ const examRoutes = require('./routes/examRoute');
 app.use('/exam/', examRoutes);
 
 
-
 module.exports = app;

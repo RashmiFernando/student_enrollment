@@ -20,9 +20,7 @@ const examSchema = new mongoose.Schema({
     examDuration: {
         type: Number,
         required: true
-    },
-
-   
+    },   
 })
 
 module.exports = mongoose.model('Exam', examSchema);

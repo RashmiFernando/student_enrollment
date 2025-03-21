@@ -61,30 +61,27 @@ const viewOneExam = async (req, res) => {
 
 
 //rescedule examn
-const resceduleExam = async (req, res) => {
+const rescheduleExam = async (req, res) => {
 
     try {
         const { examName, examDate, examDuration } = req.body;
 
-        const examId = req.params.id;
+        const examId = req.params.id; 
 
-        const resceduledExam = await examModel.findByIdAndUpdate(examId, {
-            examName,
-            examDate,
-            examDuration
-        });
-
-        if (!resceduledExam) {
-            return res.status(400).json({ message: "Failed to rescedule exam." });
-        }
-
-        res.status(200).json({ message: "Exam resceduled successfully", resceduledExam });
+        const resceduledExam = await examModel.findOneAndUpdate(
+            { examId },
+            { examName, examDate, examDuration },
+            { new: true }
+        );
+        
+        return res.status(200).json({ message: "Exam resceduled successfully", resceduledExam });
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "An error occurred while resceduling the exam.", error: err.message });
+        console.log(err);
+        res.status(500).json({ message: "An error occurred while resceduling the exam." })
     }
 }
+
 
 //delete exam
 
@@ -92,7 +89,7 @@ const deleteExam = async (req, res) => {
     try {
         const examId = req.params.id;
 
-        const deletedExam = await examModel.findByIdAndDelete(examId);
+        const deletedExam = await examModel.findByIdAndDelete({ examId });
 
         if (!deletedExam) {
             return res.status(400).json({ message: "Failed to delete exam." });
@@ -105,3 +102,5 @@ const deleteExam = async (req, res) => {
         res.status(500).json({ message: "An error occurred while deleting the exam.", error: err.message });
     }
 }
+
+module.exports = { createExam, viewAllExams, viewOneExam, rescheduleExam, deleteExam }; 

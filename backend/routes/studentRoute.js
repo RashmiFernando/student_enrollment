@@ -1,9 +1,9 @@
-const { resgiterStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent } = require('../controllers/studentController');
+const { registerStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent } = require('../controllers/studentController');
 const express = require('express');
 
 const router = express.Router();
 
-router.post('/resgiter', resgiterStudent);
+router.post('/register', registerStudent);
 
 router.get('/get-all', viewAllStudents);
 

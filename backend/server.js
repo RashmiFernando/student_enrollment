@@ -32,5 +32,9 @@ if (require.main === module) {
 const studentRoutes = require('./routes/studentRoute');
 app.use('/student/', studentRoutes);
 
+const examRoutes = require('./routes/examRoute');
+app.use('/exam/', examRoutes);
+
+
 
 module.exports = app;

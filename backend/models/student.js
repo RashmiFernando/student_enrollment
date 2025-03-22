@@ -7,29 +7,37 @@ const studentSchema = new mongoose.Schema({
         unique: true
     },
 
-    studentName: {
+    name: {
         type: String,
         required: true
     },
 
-    studentEmail: {
+    email: {
         type: String,
         required: true
     },
 
-    studentPhone: {
+    phone: {
         type: String,
         required: true
     },
 
-    studentAddress: {
+    address: {
         type: String,
         required: true
     },
 
-    studentGender: {
+    username: {
         type: String,
         required: true
+    },
+
+    password: {
+        type: String
+    },
+
+    registerDate: {
+        type: Date
     }
 })
 

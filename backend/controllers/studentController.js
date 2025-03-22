@@ -1,23 +1,24 @@
 const studentModel = require('../models/student');
+const bcrypt = require('bcrypt');
 
 // Create a new student
 const registerStudent = async (req, res) => {
     try {
-        const {  studentName, studentEmail, studentPhone, studentAddress, studentGender } = req.body;
+        const { name, email, phone, address, username, password } = req.body;
 
-        const createdStudent = new studentModel({            
-            studentName, 
-            studentEmail, 
-            studentPhone, 
-            studentAddress, 
-            studentGender
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        const newStudent = new studentModel({            
+            name, 
+            email, 
+            phone, 
+            address, 
+            username,
+            password: hashedPassword,
+            registerDate: new Date()
         });
 
-        if (!createdStudent) {
-            return res.status(400).json({ message: "Failed to register student." });
-        }
-
-        const savedStudent = await createdStudent.save();
+        const savedStudent = await newStudent.save();
 
         res.status(201).json({ message: "Student registered successfully", savedStudent });
 
@@ -52,9 +53,9 @@ const viewOneStudent = async (req, res) => {
     try {
         const studentId = req.params.id;
 
-        const studnet = await studentModel.find({ studentId });
+        const student = await studentModel.find({ studentId });
 
-        return res.status(200).json({ message: "Student Details : ", studnet });
+        return res.status(200).json({ message: "Student Details : ", student });
 
     } catch (err) {
         console.log(err);
@@ -67,16 +68,22 @@ const viewOneStudent = async (req, res) => {
 const updateStudent = async (req, res) => {
 
     try {
-        const { studentName, studentEmail, studentPhone, studentAddress, studentGender } = req.body;
+        const { name, email, phone, address, username, password } = req.body;
 
         const studentId = req.params.id;
 
+        const updateFields = { name, email, phone, address, username};
+
+        if (password) {
+            updateFields.password = await bcrypt.hash(password, 10);
+        }
+
         const updatedStudent = await studentModel.findOneAndUpdate(
-            { studentId },
-            { studentName, studentEmail, studentPhone, studentAddress, studentGender },
-            { new: true }
+            { studentId },  
+            updateFields,        
+            { new: true }        
         );
-        
+      
         return res.status(200).json({ message: "Studnet details updated", updatedStudent });
 
     } catch (err) {
@@ -85,7 +92,7 @@ const updateStudent = async (req, res) => {
     }
 }
 
-
+ 
 // delete student
 const deleteStudent = async (req, res) => {
 
@@ -103,4 +110,30 @@ const deleteStudent = async (req, res) => {
 }
 
 
-module.exports = { registerStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent };
+// login student
+const loginStudent = async (req, res) => {
+
+    try {
+        const { username, password } = req.body;
+
+        const student = await studentModel.findOne({ username });
+
+        if (!student) {
+            return res.status(404).json({ message: "Username not found.." });
+        }
+
+        const decryptedPassword = bcrypt.compare(password, student.password);
+
+        if (!decryptedPassword) {
+            return res.status(401).json({ message: "Incorrect password" });
+        }
+
+        res.status(200).json({ message: "Login successful" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+module.exports = { registerStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent, loginStudent };

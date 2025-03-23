@@ -9,27 +9,35 @@ const studentSchema = new mongoose.Schema({
 
     name: {
         type: String,
-        required: true
+        required: true,
+        maxlength: 50
     },
 
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        match: [/^\S+@\S+\.\S+$/, "Invalid email format"]
+
     },
 
     phone: {
         type: String,
-        required: true
+        required: true,
+        match: [/^\d{10}$/, "Phone number must be 10 digits"]
     },
 
     address: {
         type: String,
-        required: true
+        required: true,
+        trim: true
     },
 
     username: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        maxlength: 12
     },
 
     password: {

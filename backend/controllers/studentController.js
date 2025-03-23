@@ -6,6 +6,11 @@ const registerStudent = async (req, res) => {
     try {
         const { name, email, phone, address, username, password } = req.body;
 
+        // input field validation
+        if (!name || !email || !phone || !address || !username || !password) {
+            return res.status(400).json({ message: "Please enter all fields" });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
         
         const newStudent = new studentModel({            
@@ -68,15 +73,16 @@ const viewOneStudent = async (req, res) => {
 const updateStudent = async (req, res) => {
 
     try {
-        const { name, email, phone, address, username, password } = req.body;
+        const { name, email, phone, address } = req.body;
+
+        // input field validation
+        if (!name || !email || !phone || !address) {
+            return res.status(400).json({ message: "Please enter all fields" });
+        }        
 
         const studentId = req.params.id;
 
-        const updateFields = { name, email, phone, address, username};
-
-        if (password) {
-            updateFields.password = await bcrypt.hash(password, 10);
-        }
+        const updateFields = { name, email, phone, address};
 
         const updatedStudent = await studentModel.findOneAndUpdate(
             { studentId },  
@@ -89,6 +95,32 @@ const updateStudent = async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: "Unalbe to update the student" })
+    }
+}
+
+// update student
+const updateStudentPassword = async (req, res) => {
+
+    try {
+        const {password } = req.body;
+        
+        const studentId = req.params.id;
+
+        if (password) {
+            updateFields.password = await bcrypt.hash(password, 10);
+        }
+
+        const updatedStudent = await studentModel.findOneAndUpdate(
+            { studentId },  
+            updateFields,        
+            { new: true }        
+        );
+      
+        return res.status(200).json({ message: "Password updated", updatedStudent });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "Unalbe to update the password" })
     }
 }
 
@@ -116,19 +148,24 @@ const loginStudent = async (req, res) => {
     try {
         const { username, password } = req.body;
 
+        // input field validation
+        if (!username || !password) {
+            return res.status(400).json({ message: "Please enter username and password" });
+        }
+
         const student = await studentModel.findOne({ username });
 
         if (!student) {
             return res.status(404).json({ message: "Username not found.." });
         }
 
-        const decryptedPassword = bcrypt.compare(password, student.password);
+        const isPasswordValid = await bcrypt.compare(password, student.password);
 
-        if (!decryptedPassword) {
+        if (!isPasswordValid) {
             return res.status(401).json({ message: "Incorrect password" });
         }
 
-        res.status(200).json({ message: "Login successful" });
+        return res.status(200).json({ message: "Login successful" });
 
     } catch (err) {
         console.error(err);
@@ -136,4 +173,4 @@ const loginStudent = async (req, res) => {
     }
 }
 
-module.exports = { registerStudent, viewAllStudents, viewOneStudent, updateStudent, deleteStudent, loginStudent };
+module.exports = { registerStudent, viewAllStudents, viewOneStudent, updateStudent, updateStudentPassword, deleteStudent, loginStudent };

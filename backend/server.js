@@ -35,5 +35,8 @@ app.use('/student/', studentRoutes);
 const examRoutes = require('./routes/examRoute');
 app.use('/exam/', examRoutes);
 
+const enrollmentRoutes = require('./routes/enrollmentRoute');
+app.use('/enrollment/', enrollmentRoutes);
+
 
 module.exports = app;

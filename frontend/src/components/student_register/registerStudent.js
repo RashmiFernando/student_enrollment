@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const StudentRegister = () => {
+
     const navigate = useNavigate(); // For redirection
 
     // State variables for form inputs
@@ -31,7 +32,7 @@ const StudentRegister = () => {
         axios.post("http://localhost:5000/student/register", newStudent)
             .then(() => {
                 alert("Student Registered Successfully!");
-                navigate("/student-dashboard"); // Redirect to student dashboard
+                navigate("/"); 
             })
             .catch((err) => {
                 alert("Error: " + err.response.data.message);
@@ -43,6 +44,7 @@ const StudentRegister = () => {
             <h2 className="register-title">Student Registration</h2>
             
             <form className="register-form" onSubmit={sendData}>
+                
                 <div className="form-group">
                     <label>Name</label>
                     <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />

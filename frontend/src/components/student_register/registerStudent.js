@@ -28,7 +28,7 @@ const StudentRegister = () => {
         };
 
         // Sending data to the backend API
-        axios.post("http://localhost:3000/api/student/register", newStudent)
+        axios.post("http://localhost:5000/student/register", newStudent)
             .then(() => {
                 alert("Student Registered Successfully!");
                 navigate("/student-dashboard"); // Redirect to student dashboard

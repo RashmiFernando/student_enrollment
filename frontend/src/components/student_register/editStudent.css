@@ -1,0 +1,62 @@
+.edit-student-container {
+    padding: 40px;
+    font-family: "Segoe UI", sans-serif;
+    max-width: 500px;
+    margin: 50px auto;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .edit-student-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+  }
+  
+  .edit-student-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .edit-student-form label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #444;
+  }
+  
+  .edit-student-form input {
+    padding: 10px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+  }
+  
+  .edit-student-form input:disabled {
+    background-color: #f2f2f2;
+    color: #666;
+  }
+  
+  .edit-student-form button {
+    padding: 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+  
+  .edit-student-form button:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-text {
+    color: red;
+    font-size: 13px;
+    margin-top: -8px;
+    margin-bottom: 10px;
+  }
+  

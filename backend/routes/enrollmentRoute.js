@@ -1,5 +1,5 @@
 const {
-    createEnrollment
+    createEnrollment,getEnrollmentsByStudent
 
 } = require('../controllers/enrollmentController');
 
@@ -8,6 +8,8 @@ const router = express.Router();
 
 // Create a new enrollment
 router.post('/create', createEnrollment);
+
+router.get('/student/:studentId', getEnrollmentsByStudent);
 /*
 // Get all enrollments
 router.get('/get-all', getAllEnrollments);

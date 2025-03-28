@@ -47,7 +47,7 @@ const viewOneStudent = async (req, res) => {
   try {
     const studentId = req.params.id;
 
-    const student = await studentModel.find({ studentId }); // ❌ returns array
+    const student = await studentModel.findOne({ studentId });
 
     if (!student) {
       return res.status(404).json({ message: "Student not found" });

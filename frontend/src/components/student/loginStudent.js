@@ -1,9 +1,7 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "../css/login.css";
 
 const Home = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="login-container">
@@ -14,4 +12,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Home; 

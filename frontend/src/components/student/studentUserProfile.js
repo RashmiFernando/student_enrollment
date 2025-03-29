@@ -63,6 +63,15 @@ const EditStudent = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({ ...prev, [name]: value }));
+
+    if (passwordErrors[name]) {
+      setPasswordErrors(prev => ({ ...prev, [name]: "" }));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -82,7 +91,7 @@ const EditStudent = () => {
   axios.put(`http://localhost:5000/student/update/${id}`, updatedStudent)
       .then(() => {
         alert("Student details updated!");
-        navigate("/students");
+        navigate("/student-dashboard");
       })
       .catch((err) => {
         alert("Error updating student.");
@@ -105,6 +114,7 @@ const EditStudent = () => {
       .then(() => {
         alert("Password updated successfully!");
         setPasswordData({ password: "", confirmPassword: "" });
+        navigate("/student-dashboard");
       })
       .catch((err) => {
         alert("Error updating password.");
@@ -145,24 +155,13 @@ const EditStudent = () => {
       <h3>Password Update</h3>
 
       <form onSubmit={handlePasswordSubmit} className="edit-student-form">
+
         <label>New Password</label>
-        <input 
-          type="password" 
-          name="password" 
-          value={passwordData.password} 
-          onChange={handleChange} 
-          required 
-        />
+        <input type="text" name="password"  value={passwordData.password} onChange={handlePasswordChange} required />
         {passwordErrors.password && <span className="error-text">{passwordErrors.password}</span>}
 
         <label>Confirm Password</label>
-        <input 
-          type="password" 
-          name="confirmPassword" 
-          value={passwordData.confirmPassword} 
-          onChange={handleChange} 
-          required 
-        />
+        <input type="text" name="confirmPassword" value={passwordData.confirmPassword} onChange={handlePasswordChange}  required />
         {passwordErrors.confirmPassword && <span className="error-text">{passwordErrors.confirmPassword}</span>}
 
         <button type="submit">Update Password</button>

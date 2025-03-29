@@ -93,17 +93,24 @@ const updateStudentPassword = async (req, res) => {
     const studentId = req.params.id;
     const { password } = req.body;
 
-    if (password) {
-      updateFields.password = await bcrypt.hash(password, 10);
+    if (!password) {
+      return res.status(400).json({ message: "Password is required" });
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const updatedStudent = await studentModel.findOneAndUpdate(
       { studentId },
-      { password: updateFields.password },
+      { password: hashedPassword },
       { new: true }
     );
 
-    return res.status(200).json({ message: "Password updated", updatedStudent });
+    if (!updatedStudent) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    return res.status(200).json({ message: "Password updated successfully", updatedStudent });
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Unable to update the password" });

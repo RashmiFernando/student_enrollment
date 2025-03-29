@@ -27,11 +27,16 @@ function App() {
 
           <Route path="/register" exact element={<StudentRegister />} />
           <Route path="/login" exact element={<StudentLogin />} />
-          
-          <Route path="/course-enroll" exact element={<CourseEnroll />} />
+
           <Route path="/student-dashboard" element={<StudentDashboard />} />
-          <Route path="/students" element={<ViewAllStudents />} />
           <Route path="/student/edit/:id" element={<EditStudent />} />
+
+
+          <Route path="/students" element={<ViewAllStudents />} />
+          
+
+          <Route path="/course-enroll" exact element={<CourseEnroll />} />  
+          
           <Route path="/exam/add" element={<AddExam />} />
           
         </Routes>

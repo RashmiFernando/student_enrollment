@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./editStudent.css";
+import "../css/studentUserProfile.css";
 
 const EditStudent = () => {
   const { id } = useParams();
@@ -15,10 +15,16 @@ const EditStudent = () => {
     username: ""
   });
 
+  const [passwordData, setPasswordData] = useState({
+    password: "",
+    confirmPassword: ""
+  });
+
   const [errors, setErrors] = useState({});
+  const [passwordErrors, setPasswordErrors] = useState({});
 
   useEffect(() => {
-    // ✅ Fetch and auto-fill student data
+
     axios.get(`http://localhost:5000/student/view/${id}`)
       .then((res) => {
         const student = res.data?.student || res.data?.Student || res.data || {};
@@ -45,6 +51,13 @@ const EditStudent = () => {
     return newErrors;
   };
 
+  const validatePassword = () => {
+    const newErrors = {};
+    if (!passwordData.password) newErrors.password = "Password is required";
+    if (passwordData.password !== passwordData.confirmPassword) newErrors.confirmPassword = "Passwords do not match";
+    return newErrors;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -52,6 +65,7 @@ const EditStudent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -62,11 +76,10 @@ const EditStudent = () => {
       name: formData.name,
       email: formData.email,
       phone: formData.phone,
-      address: formData.address,
-      username: formData.username,
+      address: formData.address
     };
 
-    axios.put(`http://localhost:5000/student/update/${id}`, updatedStudent)
+  axios.put(`http://localhost:5000/student/update/${id}`, updatedStudent)
       .then(() => {
         alert("Student details updated!");
         navigate("/students");
@@ -77,9 +90,34 @@ const EditStudent = () => {
       });
   };
 
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+
+    const validationErrors = validatePassword();
+    if (Object.keys(validationErrors).length > 0) {
+      setPasswordErrors(validationErrors);
+      return;
+    }
+
+    axios.put(`http://localhost:5000/student/change-password/${id}`, {
+      password: passwordData.password
+    })
+      .then(() => {
+        alert("Password updated successfully!");
+        setPasswordData({ password: "", confirmPassword: "" });
+      })
+      .catch((err) => {
+        alert("Error updating password.");
+        console.error(err);
+      });
+  };
+
   return (
     <div className="edit-student-container">
       <h2>Edit Student</h2>
+
+      <h3>Student Information</h3>
+
       <form onSubmit={handleSubmit} className="edit-student-form">
         <label>Name</label>
         <input type="text" name="name" value={formData.name} onChange={handleChange} required />
@@ -100,7 +138,34 @@ const EditStudent = () => {
         <label>Username</label>
         <input type="text" name="username" value={formData.username} disabled />
 
-        <button type="submit">Update</button>
+        <button type="submit">Update Details</button>
+      </form>
+
+
+      <h3>Password Update</h3>
+
+      <form onSubmit={handlePasswordSubmit} className="edit-student-form">
+        <label>New Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          value={passwordData.password} 
+          onChange={handleChange} 
+          required 
+        />
+        {passwordErrors.password && <span className="error-text">{passwordErrors.password}</span>}
+
+        <label>Confirm Password</label>
+        <input 
+          type="password" 
+          name="confirmPassword" 
+          value={passwordData.confirmPassword} 
+          onChange={handleChange} 
+          required 
+        />
+        {passwordErrors.confirmPassword && <span className="error-text">{passwordErrors.confirmPassword}</span>}
+
+        <button type="submit">Update Password</button>
       </form>
     </div>
   );

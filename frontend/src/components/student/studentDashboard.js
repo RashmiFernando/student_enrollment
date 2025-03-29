@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./StudentHome.css";
+import "../css/studentDashboard.css";
 
 const StudentHome = () => {
-  const studentId = "ST-0001"; // Replace with logged-in student ID once login is ready
+  const studentId = "ST-0001";
 
   const [student, setStudent] = useState(null);
-  const [courses, setCourses] = useState([]);
+  const [enrollment, setEnrollments] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
 
+
   useEffect(() => {
-    // Fetch student details
+
     axios
       .get(`http://localhost:5000/student/view/${studentId}`)
       .then((res) => {
@@ -20,12 +21,12 @@ const StudentHome = () => {
       })
       .catch((err) => console.error("Error fetching student info:", err));
 
-    // Fetch enrolled courses
     axios
-      .get(`http://localhost:5000/enrollment/student/${studentId}`)
-      .then((res) => setCourses(res.data))
+      .get(`http://localhost:5000/enrollment/student-enrollments/${studentId}`)
+      .then((res) => setEnrollments(res.data))
       .catch((err) => console.error("Error fetching enrolled courses:", err));
   }, [studentId]);
+
 
   return (
     <div className="student-home-container">
@@ -64,10 +65,8 @@ const StudentHome = () => {
       {selectedSection === "home" && (
         <>
           <div className="student-notice">
-            ✅ Current Calendar Period Registration Details Only
-          </div>
-
-         
+            Current Calendar Period Registration Details Only
+          </div>         
 
           <div className="course-section">
             <h3>My Current Registered Courses</h3>
@@ -81,17 +80,17 @@ const StudentHome = () => {
                 </tr>
               </thead>
               <tbody>
-                {courses.length === 0 ? (
+                { enrollment.length === 0 ? (
                   <tr>
                     <td colSpan="4">No courses enrolled.</td>
                   </tr>
                 ) : (
-                  courses.map((course, idx) => (
+                  enrollment.map((enrollment, idx) => (
                     <tr key={idx}>
-                      <td>{course.courseId}</td>
-                      <td>{course.name}</td>
-                      <td>{course.status}</td>
-                      <td>{new Date(course.enrollmentDate).toLocaleDateString()}</td>
+                      <td>{enrollment.code}</td>
+                      <td>{enrollment.name}</td>
+                      <td>{enrollment.status}</td>
+                      <td>{new Date(enrollment.enrollmentDate).toLocaleDateString()}</td>
                     </tr>
                   ))
                 )}
@@ -105,6 +104,7 @@ const StudentHome = () => {
       {selectedSection === "personal" && student && (
         <div className="personal-info-section">
           <h3>Student Personal Information</h3>
+
           <div className="personal-info-card">
             <p><strong>Student ID:</strong> {student.studentId}</p>
             <p><strong>Name:</strong> {student.name}</p>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./addExam.css";
+import "../css/addExam.css";
 
 const AddExam = () => {
   const [examName, setExamName] = useState("");

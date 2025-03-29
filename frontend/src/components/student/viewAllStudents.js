@@ -17,7 +17,7 @@ const ViewAllStudents = () => {
   const navigate = useNavigate();
 
   const fetchStudents = () => {
-    axios.get("http://localhost:5000/student/get-all")
+    axios.get("http://localhost:5000/student/view-all")
       .then((res) => {
         const data = res.data.allStudnets || res.data.allStudents || res.data;
         setStudents(data);

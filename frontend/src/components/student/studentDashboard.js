@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/studentDashboard.css";
+import { useNavigate } from "react-router-dom";
 
 const StudentHome = () => {
   const studentId = "ST-0001";
+  const navigate = useNavigate();
 
   const [student, setStudent] = useState(null);
   const [enrollment, setEnrollments] = useState([]);
@@ -26,6 +28,10 @@ const StudentHome = () => {
       .then((res) => setEnrollments(res.data))
       .catch((err) => console.error("Error fetching enrolled courses:", err));
   }, [studentId]);
+
+  const handleEditDetails = () => {
+    navigate(`/student/edit/${studentId}`);
+  };
 
 
   return (
@@ -114,6 +120,12 @@ const StudentHome = () => {
             <p><strong>Username:</strong> {student.username}</p>
             <p><strong>Registered Date:</strong> {new Date(student.registerDate).toLocaleDateString()}</p>
           </div>
+
+          <button 
+              className="edit-details-btn"
+              onClick={handleEditDetails}>
+                Edit My Details
+          </button>
         </div>
       )}
 
@@ -121,4 +133,4 @@ const StudentHome = () => {
   );
 };
 
-export default StudentHome;
+export default StudentHome; 

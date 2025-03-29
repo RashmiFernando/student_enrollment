@@ -132,3 +132,17 @@
     line-height: 1.8;
   }
   
+  .edit-details-btn {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .edit-details-btn:hover {
+    background-color: #45a049;
+  }

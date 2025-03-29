@@ -1,12 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import './courseEnroll.css'; // Assuming your styles are here
+import '../css/courseEnroll.css'
 
 const CourseEnroll = () => {    
-  // Placeholder for logged-in user
+
   const studentId = "ST-0001";
 
-  // Courses data
   const courses = [
     { courseId: 'BM2020', courseName: 'Business Analysis' },
     { courseId: 'IT114', courseName: 'Base Computing' }

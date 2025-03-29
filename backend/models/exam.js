@@ -26,6 +26,7 @@ const examSchema = new mongoose.Schema({
         type: Number,
         required: true
     },   
+    
     examLocation: {
         type: String,
         required: true

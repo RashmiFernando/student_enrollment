@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./registerStudent.css";
+import "../css/registerStudent.css";
 
 const StudentRegister = () => {
-    const navigate = useNavigate(); // For redirection
+    const navigate = useNavigate();
 
-    // State variables for form inputs
+    // variables for form inputs
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
@@ -14,11 +14,9 @@ const StudentRegister = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
-    // Function to handle form submission
     const sendData = (e) => {
-        e.preventDefault(); // Prevent page reload
+        e.preventDefault(); 
 
-        // Creating an object with the form data
         const newStudent = {
             name,
             email,
@@ -28,11 +26,10 @@ const StudentRegister = () => {
             password
         };
 
-        // Sending data to the backend API
         axios.post("http://localhost:5000/student/register", newStudent)
             .then(() => {
                 alert("Student Registered Successfully!");
-                navigate("/student-dashboard"); // Redirect to student dashboard
+                navigate("/student-dashboard");
             })
             .catch((err) => {
                 alert("Error: " + err.response.data.message);

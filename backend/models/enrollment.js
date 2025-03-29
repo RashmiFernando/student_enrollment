@@ -26,7 +26,11 @@ const enrollmentSchema = new mongoose.Schema({
         type: String,
         enum: ['active', 'completed', 'cancelled'],
         default: 'active'
-    }
+    },
+
+    name: {
+        type: String,
+      },    
 });
 
 // Generate enrollmentId

@@ -19,27 +19,24 @@
   }
   
   .logo-img {
-    height: 80px;
+    height: 50px;
     width: auto;
     margin-right: 20px;
   }
   
-  .student-id-overlay {
-    position: absolute;
-    left: 100px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
   
   .student-id-overlay p {
-    margin: 0;
-    font-size: 14px;
-    opacity: 0.85;
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: right;
   }
   
   .student-id-overlay h2 {
-    margin: 4px 0 0 0;
-    font-size: 20px;
+    margin-right: 20px;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: right;
   }
   
   /* Navbar */

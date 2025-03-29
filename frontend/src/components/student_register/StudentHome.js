@@ -4,6 +4,7 @@ import "./StudentHome.css";
 
 const StudentHome = () => {
   const studentId = "ST-0001"; // Replace with logged-in student ID once login is ready
+
   const [student, setStudent] = useState(null);
   const [courses, setCourses] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
@@ -14,13 +15,14 @@ const StudentHome = () => {
       .get(`http://localhost:5000/student/view/${studentId}`)
       .then((res) => {
         const data = res.data.student || res.data.Student || res.data[0] || res.data;
+        console.log("Student loaded:", data); 
         setStudent(data);
       })
       .catch((err) => console.error("Error fetching student info:", err));
 
     // Fetch enrolled courses
     axios
-      .get(`http://localhost:5000/api/enrollments/student/${studentId}`)
+      .get(`http://localhost:5000/enrollment/student/${studentId}`)
       .then((res) => setCourses(res.data))
       .catch((err) => console.error("Error fetching enrolled courses:", err));
   }, [studentId]);
@@ -31,12 +33,13 @@ const StudentHome = () => {
       <header className="student-header">
         <div className="header-left">
           <img src="/logo.png" alt="University Logo" className="logo-img" />
-          <div className="student-id-overlay">
+        </div>
+      </header>
+
+         <div className="student-id-overlay">
             <p>{student?.studentId}</p>
             <h2>{student?.name}</h2>
           </div>
-        </div>
-      </header>
 
       {/* Navigation */}
       <nav className="student-navbar">
@@ -52,7 +55,7 @@ const StudentHome = () => {
         >
           Personal Info
         </button>
-        <button className="nav-btn">Academic Info</button>
+        <button className="nav-btn">Enroll to New Course</button>
         <button className="nav-btn">Registration</button>
         <button className="nav-btn">Exams</button>
       </nav>
@@ -86,7 +89,7 @@ const StudentHome = () => {
                   courses.map((course, idx) => (
                     <tr key={idx}>
                       <td>{course.courseId}</td>
-                      <td>{course.courseName}</td>
+                      <td>{course.name}</td>
                       <td>{course.status}</td>
                       <td>{new Date(course.enrollmentDate).toLocaleDateString()}</td>
                     </tr>
@@ -113,6 +116,7 @@ const StudentHome = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

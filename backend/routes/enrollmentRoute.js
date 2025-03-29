@@ -10,6 +10,9 @@ const router = express.Router();
 router.post('/create', createEnrollment);
 
 router.get('/student/:studentId', getEnrollmentsByStudent);
+
+
+
 /*
 // Get all enrollments
 router.get('/get-all', getAllEnrollments);

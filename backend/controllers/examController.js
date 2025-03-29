@@ -8,7 +8,8 @@ const createExam = async (req, res) => {
         const createdExam = new examModel({
             examName,
             examDate,
-            examDuration
+            examDuration,
+            examLocation
         });
 
         if (!createdExam) {
@@ -70,7 +71,7 @@ const rescheduleExam = async (req, res) => {
 
         const resceduledExam = await examModel.findOneAndUpdate(
             { examId },
-            { examName, examDate, examDuration },
+            { examName, examDate, examDuration,examLocation },
             { new: true }
         );
         

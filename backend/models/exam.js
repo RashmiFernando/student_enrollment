@@ -21,6 +21,10 @@ const examSchema = new mongoose.Schema({
         type: Number,
         required: true
     },   
+    examLocation: {
+        type: String,
+        required: true
+    },
 })
 
 module.exports = mongoose.model('Exam', examSchema);

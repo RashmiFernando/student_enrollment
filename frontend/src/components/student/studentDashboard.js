@@ -88,7 +88,7 @@ const StudentHome = () => {
                   enrollment.map((enrollment, idx) => (
                     <tr key={idx}>
                       <td>{enrollment.code}</td>
-                      <td>{enrollment.name}</td>
+                      <td>{enrollment.courseName}</td>
                       <td>{enrollment.status}</td>
                       <td>{new Date(enrollment.enrollmentDate).toLocaleDateString()}</td>
                     </tr>

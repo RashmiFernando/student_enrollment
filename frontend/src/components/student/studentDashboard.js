@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../css/StudentHome.css";
+import "../css/studentDashboard.css";
 
 const StudentHome = () => {
   const studentId = "ST-0001";
@@ -80,17 +80,17 @@ const StudentHome = () => {
                 </tr>
               </thead>
               <tbody>
-                { cour .length === 0 ? (
+                { enrollment.length === 0 ? (
                   <tr>
                     <td colSpan="4">No courses enrolled.</td>
                   </tr>
                 ) : (
-                  courses.map((course, idx) => (
+                  enrollment.map((enrollment, idx) => (
                     <tr key={idx}>
-                      <td>{course.courseId}</td>
-                      <td>{course.name}</td>
-                      <td>{course.status}</td>
-                      <td>{new Date(course.enrollmentDate).toLocaleDateString()}</td>
+                      <td>{enrollment.code}</td>
+                      <td>{enrollment.name}</td>
+                      <td>{enrollment.status}</td>
+                      <td>{new Date(enrollment.enrollmentDate).toLocaleDateString()}</td>
                     </tr>
                   ))
                 )}
@@ -104,6 +104,7 @@ const StudentHome = () => {
       {selectedSection === "personal" && student && (
         <div className="personal-info-section">
           <h3>Student Personal Information</h3>
+
           <div className="personal-info-card">
             <p><strong>Student ID:</strong> {student.studentId}</p>
             <p><strong>Name:</strong> {student.name}</p>

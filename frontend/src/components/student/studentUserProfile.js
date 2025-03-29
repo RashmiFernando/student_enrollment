@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../css/editStudent.css";
+import "../css/studentUserProfile.css";
 
 const EditStudent = () => {
   const { id } = useParams();
@@ -150,7 +150,7 @@ const EditStudent = () => {
           type="password" 
           name="password" 
           value={passwordData.password} 
-          onChange={handlePasswordChange} 
+          onChange={handleChange} 
           required 
         />
         {passwordErrors.password && <span className="error-text">{passwordErrors.password}</span>}
@@ -160,7 +160,7 @@ const EditStudent = () => {
           type="password" 
           name="confirmPassword" 
           value={passwordData.confirmPassword} 
-          onChange={handlePasswordChange} 
+          onChange={handleChange} 
           required 
         />
         {passwordErrors.confirmPassword && <span className="error-text">{passwordErrors.confirmPassword}</span>}

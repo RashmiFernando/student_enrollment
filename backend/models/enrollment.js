@@ -7,14 +7,18 @@ const enrollmentSchema = new mongoose.Schema({
         unique: true
     },
 
+    code: {
+        type: String,
+        required: true
+    },
+
     studentId: {
         type: String,
         required: true
     },
 
-    courseId: {
+    courseName: {
         type: String,
-        required: true
     },
 
     enrollmentDate: {
@@ -24,13 +28,10 @@ const enrollmentSchema = new mongoose.Schema({
 
     status: {
         type: String,
-        enum: ['active', 'completed', 'cancelled'],
-        default: 'active'
+        enum: ['Active', 'Unenroll'],
+        default: 'Active'
     },
-
-    name: {
-        type: String,
-      },    
+    
 });
 
 // Generate enrollmentId

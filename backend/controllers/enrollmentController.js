@@ -3,18 +3,18 @@ const Enrollment = require('../models/enrollment');
 // Create a new enrollment
 const createEnrollment = async (req, res) => {
     try {
-        const { studentId, courseId, status } = req.body;
+        const { code, studentId, courseName, enrollmentDate } = req.body;
 
         // Input validation
-        if (!studentId || !courseId) {
-            return res.status(400).json({ message: "Student ID and Course ID are required" });
+        if (!code || !studentId || !courseName || !enrollmentDate) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
         const newEnrollment = new Enrollment({
+            code,
             studentId,
-            courseId,
-            enrollmentDate: new Date(),
-            status: status || 'active'
+            courseName,
+            enrollmentDate: new Date()
         });
 
         const savedEnrollment = await newEnrollment.save();
@@ -26,6 +26,7 @@ const createEnrollment = async (req, res) => {
         res.status(500).json({ message: "An error occurred while creating enrollment", error: err.message });
     }
 };
+
 
 // Get all enrollments for a specific student
 const getEnrollmentsByStudent = async (req, res) => {
@@ -39,14 +40,12 @@ const getEnrollmentsByStudent = async (req, res) => {
         }
 
         res.status(200).json(enrollments);
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Error fetching enrollments", error: err.message });
     }
 };
 
-module.exports = {
-    createEnrollment,
-    getEnrollmentsByStudent
-};
+module.exports = { createEnrollment, getEnrollmentsByStudent};
 

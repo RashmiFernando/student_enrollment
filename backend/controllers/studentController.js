@@ -1,6 +1,7 @@
 const studentModel = require('../models/student');
 const bcrypt = require('bcrypt');
 
+
 // Register Student
 const registerStudent = async (req, res) => {
   try {
@@ -31,6 +32,7 @@ const registerStudent = async (req, res) => {
   }
 };
 
+
 // View All Students
 const viewAllStudents = async (req, res) => {
   try {
@@ -42,7 +44,8 @@ const viewAllStudents = async (req, res) => {
   }
 };
 
-// View One Student (before viewStudent.js)
+
+// View One Student
 const viewOneStudent = async (req, res) => {
   try {
     const studentId = req.params.id;
@@ -59,6 +62,7 @@ const viewOneStudent = async (req, res) => {
     res.status(500).json({ message: "Unable to get student by ID", error: err.message });
   }
 };
+
 
 // Update Student
 const updateStudent = async (req, res) => {
@@ -82,14 +86,15 @@ const updateStudent = async (req, res) => {
   }
 };
 
-// Password update (bug: updateFields not defined)
+
+// Password update
 const updateStudentPassword = async (req, res) => {
   try {
     const studentId = req.params.id;
     const { password } = req.body;
 
     if (password) {
-      updateFields.password = await bcrypt.hash(password, 10); // ❌ BUG
+      updateFields.password = await bcrypt.hash(password, 10);
     }
 
     const updatedStudent = await studentModel.findOneAndUpdate(
@@ -104,6 +109,7 @@ const updateStudentPassword = async (req, res) => {
     res.status(500).json({ message: "Unable to update the password" });
   }
 };
+
 
 // Delete Student
 const deleteStudent = async (req, res) => {
@@ -122,6 +128,7 @@ const deleteStudent = async (req, res) => {
     res.status(500).json({ message: "Unable to delete student", error: err.message });
   }
 };
+
 
 // Login Student
 const loginStudent = async (req, res) => {
@@ -147,12 +154,4 @@ const loginStudent = async (req, res) => {
   }
 };
 
-module.exports = {
-  registerStudent,
-  viewAllStudents,
-  viewOneStudent,
-  updateStudent,
-  updateStudentPassword,
-  deleteStudent,
-  loginStudent
-};
+module.exports = { registerStudent, viewAllStudents, viewOneStudent, updateStudent, updateStudentPassword, deleteStudent, loginStudent};

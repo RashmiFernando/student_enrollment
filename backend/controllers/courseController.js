@@ -1,6 +1,5 @@
 const Course = require('../models/course');
 
-
 // Add a new course
 const addCourse = async (req, res) => {
   try {
@@ -11,6 +10,7 @@ const addCourse = async (req, res) => {
     }
 
     const existing = await Course.findOne({ code });
+
     if (existing) {
       return res.status(400).json({ message: "Course code already exists" });
     }
@@ -25,11 +25,13 @@ const addCourse = async (req, res) => {
 
     const savedCourse = await newCourse.save();
     res.status(201).json({ message: "Course created successfully", savedCourse });
+
   } catch (err) {
     console.error("Error adding course:", err);
     res.status(500).json({ message: "Failed to create course", error: err.message });
   }
 };
+
 
 // View all courses
 const getcourses = async (req, res) => {
@@ -47,27 +49,4 @@ const getcourses = async (req, res) => {
   }
 };
 
-/* View a single course by code
-const getCourse = async (req, res) => {
-  try {
-    const code = req.params.code;
-    const course = await Course.findOne({ code });
-
-    if (!course) {
-      return res.status(404).json({ message: "Course not found" });
-    }
-
-    res.status(200).json({ course });
-  } catch (err) {
-    console.error("Error retrieving course:", err);
-    res.status(500).json({ message: "Failed to fetch course", error: err.message });
-  }
-};
-*/
-
-
-module.exports = {
-  getcourses,
- // getCourse,
-  addCourse
-};
+module.exports = { getcourses, addCourse };

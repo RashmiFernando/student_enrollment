@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/register', registerStudent);
 
-router.get('/get-all', viewAllStudents);
+router.get('/view-all', viewAllStudents);
 
 router.get('/view/:id', viewOneStudent);
 

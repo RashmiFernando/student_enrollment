@@ -3,9 +3,14 @@ const examModel = require('../models/exam');
 //create a new exam
 const createExam = async (req, res) => {
     try {
-        const { examName, examDate, examDuration } = req.body;
+        const { code, examName, examDate, examDuration, examLocation } = req.body;
+
+        if(!code || !examName || !examDate || !examDuration || !examLocation) {
+            return res.status(400).json({ message: "Please provide all exam fields" });
+        }
 
         const createdExam = new examModel({
+            code,
             examName,
             examDate,
             examDuration,
@@ -26,10 +31,9 @@ const createExam = async (req, res) => {
     }
 }
 
+
 //get all exams
-
 const viewAllExams = async (req, res) => {
-
     try {
         const allExams = await examModel.find();
 
@@ -45,12 +49,13 @@ const viewAllExams = async (req, res) => {
     }
 }
 
+
 //get one exam
 const viewOneExam = async (req, res) => {
     try {
         const examId = req.params.id;
 
-        const exam = await examModel.find({ examId });
+        const exam = await examModel.findOne({ examId });
 
         return res.status(200).json({ message: "Exam Details : ", exam });
 
@@ -63,7 +68,6 @@ const viewOneExam = async (req, res) => {
 
 //rescedule examn
 const rescheduleExam = async (req, res) => {
-
     try {
         const { examName, examDate, examDuration } = req.body;
 
@@ -71,7 +75,7 @@ const rescheduleExam = async (req, res) => {
 
         const resceduledExam = await examModel.findOneAndUpdate(
             { examId },
-            { examName, examDate, examDuration,examLocation },
+            { code, examName, examDate, examDuration, examLocation},
             { new: true }
         );
         
@@ -85,12 +89,11 @@ const rescheduleExam = async (req, res) => {
 
 
 //delete exam
-
 const deleteExam = async (req, res) => {
     try {
         const examId = req.params.id;
 
-        const deletedExam = await examModel.findByIdAndDelete({ examId });
+        const deletedExam = await examModel.findOneAndDelete({ examId });
 
         if (!deletedExam) {
             return res.status(400).json({ message: "Failed to delete exam." });

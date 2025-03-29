@@ -7,6 +7,11 @@ const examSchema = new mongoose.Schema({
         unique: true
     },
 
+    code: {
+        type: String,
+        required: true
+    },
+
     examName: {
         type: String,
         required: true
@@ -26,5 +31,28 @@ const examSchema = new mongoose.Schema({
         required: true
     },
 })
+
+
+// generate examId
+examSchema.pre('save', async function (next) {
+    if (!this.isNew) {
+        return next();
+    }
+
+    try {
+        const lastExam= await this.constructor.findOne({}, {}, { sort: { 'examId': -1 } });
+        let newExamId = 'EX-0001'; 
+
+        if (lastExam && lastExam.examId) {
+            const lastExamIdNumber = parseInt(lastExam.examId.split('-')[1], 10);
+            newExamId = `EX-${String(lastExamIdNumber + 1).padStart(4, '0')}`;
+        }
+
+        this.examId = newExamId;
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
 
 module.exports = mongoose.model('Exam', examSchema);

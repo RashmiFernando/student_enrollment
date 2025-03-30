@@ -1,6 +1,6 @@
 const studentModel = require('../models/student');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken');
 
 // Register Student
 const registerStudent = async (req, res) => {
@@ -148,13 +148,15 @@ const loginStudent = async (req, res) => {
       return res.status(404).json({ message: "Username not found" });
     }
 
-    const isMatch = await bcrypt.compare(password, student.password);
+    const matchPassword = await bcrypt.compare(password, student.password);
 
-    if (!isMatch) {
+    if (!matchPassword) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    return res.status(200).json({ message: "Login Successful", student });
+    const token = jwt.sign({ id: student.studentId, name: student.username}, process.env.JWT_SECRET, { expiresIn: '4h' });
+    res.status(200).json({ message: "Token created..", token });
+
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Login error", error: err.message });

@@ -1,7 +1,9 @@
 const { registerStudent, viewAllStudents, viewOneStudent, updateStudent,updateStudentPassword, deleteStudent, loginStudent } = require('../controllers/studentController');
-const express = require('express');
 
+const express = require('express');
 const router = express.Router();
+
+const verifyToken = require('../middleware/authorization.js');
 
 router.post('/register', registerStudent);
 

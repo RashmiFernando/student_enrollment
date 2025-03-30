@@ -2,17 +2,29 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/studentDashboard.css";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"
 
 const StudentHome = () => {
-  const studentId = "ST-0001";
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [student, setStudent] = useState(null);
   const [enrollment, setEnrollments] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
+  const [courses, setCourses] = useState([]);
 
+  // 🔐 Get studentId from JWT
+  const token = localStorage.getItem("token");
+
+  let studentId = null;
+
+  if (token) {
+    const decoded = jwtDecode(token);
+    studentId = decoded.id;
+  }
 
   useEffect(() => {
+
+    if (!studentId) return;
 
     axios
       .get(`http://localhost:5000/student/view/${studentId}`)
@@ -29,24 +41,36 @@ const StudentHome = () => {
       .catch((err) => console.error("Error fetching enrolled courses:", err));
   }, [studentId]);
 
+  axios
+  .get("http://localhost:5000/course/all")
+  .then((res) => setCourses(res.data.courses))
+  .catch((err) => console.error("Error fetching courses:", err));
+
   const handleEditDetails = () => {
     navigate(`/student/edit/${studentId}`);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login"); 
+  };
 
   return (
     <div className="student-home-container">
-      {/* Header */}
+      
       <header className="student-header">
         <div className="header-left">
-          <img src="/logo.png" alt="University Logo" className="logo-img" />
+          <h1 className="brand-logo">StudySphere</h1>
         </div>
+
+        <button className="logout-button" onClick={handleLogout}>Logout</button>
       </header>
 
-         <div className="student-id-overlay">
-            <p>{student?.studentId}</p>
-            <h2>{student?.name}</h2>
-          </div>
+      {student && (
+        <div className="welcome-message">
+          <h2>Welcome {student.name}</h2>
+        </div>
+      )}
 
       {/* Navigation */}
       <nav className="student-navbar">
@@ -62,7 +86,13 @@ const StudentHome = () => {
         >
           Personal Info
         </button>
-        <button className="nav-btn">Enroll to New Course</button>
+
+        <button
+          className={`nav-btn ${selectedSection === "enroll" ? "active" : ""}`}
+          onClick={() => setSelectedSection("enroll")}>
+            Enroll to New Course
+        </button>
+
         <button className="nav-btn">Registration</button>
         <button className="nav-btn">Exams</button>
       </nav>
@@ -126,6 +156,41 @@ const StudentHome = () => {
               onClick={handleEditDetails}>
                 Edit My Details
           </button>
+        </div>
+      )}
+
+      {/* ENROLL SECTION */}
+      {selectedSection === "enroll" && (
+        <div className="enroll-section">
+          <h3>Available Courses</h3>
+          <table className="course-table">
+            <thead>
+              <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Credit Hours</th>
+                <th>Department</th>
+                <th>Lecturer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.length === 0 ? (
+                <tr>
+                  <td colSpan="5">No courses found.</td>
+                </tr>
+              ) : (
+                courses.map((course, idx) => (
+                  <tr key={idx}>
+                    <td>{course.code}</td>
+                    <td>{course.name}</td>
+                    <td>{course.credithours}</td>
+                    <td>{course.department}</td>
+                    <td>{course.assignedlecturer}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       )}
 

@@ -224,3 +224,20 @@
 .enroll-section .course-table tr:hover {
   background-color: #fff8f0;
 }
+
+
+.enroll-now-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.enroll-now-btn:hover {
+  background-color: #388e3c;
+}

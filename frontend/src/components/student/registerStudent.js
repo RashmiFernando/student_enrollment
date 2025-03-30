@@ -29,7 +29,7 @@ const StudentRegister = () => {
         axios.post("http://localhost:5000/student/register", newStudent)
             .then(() => {
                 alert("Student Registered Successfully!");
-                navigate("/");
+                navigate("/student-dashboard");
             })
             .catch((err) => {
                 alert("Error: " + err.response.data.message);

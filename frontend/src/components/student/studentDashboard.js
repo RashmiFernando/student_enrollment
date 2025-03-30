@@ -10,6 +10,7 @@ const StudentHome = () => {
   const [student, setStudent] = useState(null);
   const [enrollment, setEnrollments] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
+  const [courses, setCourses] = useState([]);
 
   // 🔐 Get studentId from JWT
   const token = localStorage.getItem("token");
@@ -40,13 +41,18 @@ const StudentHome = () => {
       .catch((err) => console.error("Error fetching enrolled courses:", err));
   }, [studentId]);
 
+  axios
+  .get("http://localhost:5000/course/all")
+  .then((res) => setCourses(res.data.courses))
+  .catch((err) => console.error("Error fetching courses:", err));
+
   const handleEditDetails = () => {
     navigate(`/student/edit/${studentId}`);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login"); // Or wherever your login route is
+    navigate("/login"); 
   };
 
   return (
@@ -80,7 +86,13 @@ const StudentHome = () => {
         >
           Personal Info
         </button>
-        <button className="nav-btn">Enroll to New Course</button>
+
+        <button
+          className={`nav-btn ${selectedSection === "enroll" ? "active" : ""}`}
+          onClick={() => setSelectedSection("enroll")}>
+            Enroll to New Course
+        </button>
+
         <button className="nav-btn">Registration</button>
         <button className="nav-btn">Exams</button>
       </nav>
@@ -144,6 +156,41 @@ const StudentHome = () => {
               onClick={handleEditDetails}>
                 Edit My Details
           </button>
+        </div>
+      )}
+
+      {/* ENROLL SECTION */}
+      {selectedSection === "enroll" && (
+        <div className="enroll-section">
+          <h3>Available Courses</h3>
+          <table className="course-table">
+            <thead>
+              <tr>
+                <th>Course Code</th>
+                <th>Course Name</th>
+                <th>Credit Hours</th>
+                <th>Department</th>
+                <th>Lecturer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {courses.length === 0 ? (
+                <tr>
+                  <td colSpan="5">No courses found.</td>
+                </tr>
+              ) : (
+                courses.map((course, idx) => (
+                  <tr key={idx}>
+                    <td>{course.code}</td>
+                    <td>{course.name}</td>
+                    <td>{course.credithours}</td>
+                    <td>{course.department}</td>
+                    <td>{course.assignedlecturer}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       )}
 

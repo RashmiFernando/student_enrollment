@@ -2,17 +2,28 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../css/studentDashboard.css";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"
 
 const StudentHome = () => {
-  const studentId = "ST-0001";
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [student, setStudent] = useState(null);
   const [enrollment, setEnrollments] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
 
+  // 🔐 Get studentId from JWT
+  const token = localStorage.getItem("token");
+
+  let studentId = null;
+
+  if (token) {
+    const decoded = jwtDecode(token);
+    studentId = decoded.id;
+  }
 
   useEffect(() => {
+
+    if (!studentId) return;
 
     axios
       .get(`http://localhost:5000/student/view/${studentId}`)
@@ -33,20 +44,27 @@ const StudentHome = () => {
     navigate(`/student/edit/${studentId}`);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login"); // Or wherever your login route is
+  };
 
   return (
     <div className="student-home-container">
-      {/* Header */}
+      
       <header className="student-header">
         <div className="header-left">
-          <img src="/logo.png" alt="University Logo" className="logo-img" />
+          <h1 className="brand-logo">StudySphere</h1>
         </div>
+
+        <button className="logout-button" onClick={handleLogout}>Logout</button>
       </header>
 
-         <div className="student-id-overlay">
-            <p>{student?.studentId}</p>
-            <h2>{student?.name}</h2>
-          </div>
+      {student && (
+        <div className="welcome-message">
+          <h2>Welcome {student.name}</h2>
+        </div>
+      )}
 
       {/* Navigation */}
       <nav className="student-navbar">

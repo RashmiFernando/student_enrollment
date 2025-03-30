@@ -55,6 +55,31 @@ const StudentHome = () => {
     navigate("/login"); 
   };
 
+  const handleEnrollNow = (course) => {
+    if (!studentId) return;
+  
+    const enrollmentData = {
+      code: course.code,
+      courseName: course.name,
+      studentId: studentId,
+      enrollmentDate: new Date()
+    };
+  
+    axios
+      .post("http://localhost:5000/enrollment/create", enrollmentData)
+      .then(() => {
+        alert(`Enrolled in ${course.name} successfully!`);
+        
+        return axios.get(`http://localhost:5000/enrollment/student-enrollments/${studentId}`);
+      })
+      .then((res) => setEnrollments(res.data))
+      .catch((err) => {
+        console.error("Enrollment failed:", err);
+        alert("Enrollment failed. Try again.");
+      });
+  };
+  
+
   return (
     <div className="student-home-container">
       
@@ -168,24 +193,29 @@ const StudentHome = () => {
               <tr>
                 <th>Course Code</th>
                 <th>Course Name</th>
-                <th>Credit Hours</th>
-                <th>Department</th>
                 <th>Lecturer</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {courses.length === 0 ? (
                 <tr>
-                  <td colSpan="5">No courses found.</td>
+                  <td colSpan="4">No courses found.</td>
                 </tr>
               ) : (
                 courses.map((course, idx) => (
                   <tr key={idx}>
                     <td>{course.code}</td>
                     <td>{course.name}</td>
-                    <td>{course.credithours}</td>
-                    <td>{course.department}</td>
                     <td>{course.assignedlecturer}</td>
+                    <td>
+                      <button
+                        className="enroll-now-btn"
+                        onClick={() => handleEnrollNow(course)}
+                      >
+                        Enroll Now
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -193,6 +223,7 @@ const StudentHome = () => {
           </table>
         </div>
       )}
+
 
     </div>
   );

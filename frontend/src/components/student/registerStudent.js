@@ -29,16 +29,32 @@ const StudentRegister = () => {
         axios.post("http://localhost:5000/student/register", newStudent)
             .then(() => {
                 alert("Student Registered Successfully!");
-                navigate("/student-dashboard");
+                navigate("/");
             })
             .catch((err) => {
                 alert("Error: " + err.response.data.message);
             });
     };
 
+
+    const fillDummyData = () => {
+        setName("Rashmi Fernando");
+        setEmail("rashmi123@example.com");
+        setPhone("0712345678");
+        setAddress("123, Orange Street, Colombo");
+        setUsername("rashmi1");
+        setPassword("1234");
+      };
+
     return (
         <div className="register-container">
             <h2 className="register-title">Student Registration</h2>
+
+            <div className="dummy-button-wrapper">
+                <button className="dummy-button" type="button" onClick={fillDummyData}>
+                Fill Dummy Data
+                </button>
+            </div>
             
             <form className="register-form" onSubmit={sendData}>
                 <div className="form-group">

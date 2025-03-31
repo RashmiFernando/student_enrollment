@@ -5,7 +5,6 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import "../css/viewAllStudents.css";
 
 const ViewAllStudents = () => {
   const [students, setStudents] = useState([]);
@@ -110,64 +109,66 @@ const ViewAllStudents = () => {
   const totalPages = Math.ceil(sortedStudents.length / studentsPerPage);
 
   return (
-    <div className="view-all-container">
-      <h2>All Registered Students</h2>
+    <div className="p-10 font-sans bg-gray-100 min-h-screen">
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-8">All Registered Students</h2>
 
-      <div className="top-controls">
+      <div className="flex justify-between items-center mb-4">
         <input
           type="text"
           placeholder="Search by name, email or student ID..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-80 p-2 border border-gray-300 rounded"
         />
-        <div className="export-buttons">
-          <button onClick={handleExportExcel}>Export Excel</button>
-          <button onClick={handleExportPDF}>Export PDF</button>
+        <div className="flex gap-2">
+          <button onClick={handleExportExcel} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export Excel</button>
+          <button onClick={handleExportPDF} className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Export PDF</button>
         </div>
       </div>
 
-      <table className="student-table">
-        <thead>
-          <tr>
-            <th onClick={() => handleSort("studentId")}>Student ID</th>
-            <th onClick={() => handleSort("name")}>Name</th>
-            <th onClick={() => handleSort("email")}>Email</th>
-            <th onClick={() => handleSort("phone")}>Phone</th>
-            <th onClick={() => handleSort("address")}>Address</th>
-            <th onClick={() => handleSort("username")}>Username</th>
-            <th onClick={() => handleSort("registerDate")}>Registered Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentStudents.length === 0 ? (
-            <tr><td colSpan="8">No students found.</td></tr>
-          ) : (
-            currentStudents.map((student, idx) => (
-              <tr key={idx}>
-                <td>{student.studentId}</td>
-                <td>{student.name}</td>
-                <td>{student.email}</td>
-                <td>{student.phone}</td>
-                <td>{student.address}</td>
-                <td>{student.username}</td>
-                <td>{new Date(student.registerDate).toLocaleDateString()}</td>
-                <td>
-                  <button className="edit-btn" onClick={() => handleEdit(student.studentId)}>Edit</button>
-                  <button className="delete-btn" onClick={() => handleDelete(student.studentId)}>Delete</button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto">
+        <table className="w-full bg-white shadow-md rounded border border-gray-300">
+          <thead className="bg-blue-600 text-white">
+            <tr>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("studentId")}>Student ID</th>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("name")}>Name</th>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("email")}>Email</th>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("phone")}>Phone</th>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("address")}>Address</th>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("username")}>Username</th>
+              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("registerDate")}>Registered Date</th>
+              <th className="px-4 py-2 bg-blue-700">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentStudents.length === 0 ? (
+              <tr><td colSpan="8" className="text-center py-4">No students found.</td></tr>
+            ) : (
+              currentStudents.map((student, idx) => (
+                <tr key={idx} className="text-center even:bg-gray-100 hover:bg-blue-50">
+                  <td className="py-2">{student.studentId}</td>
+                  <td className="py-2">{student.name}</td>
+                  <td className="py-2">{student.email}</td>
+                  <td className="py-2">{student.phone}</td>
+                  <td className="py-2">{student.address}</td>
+                  <td className="py-2">{student.username}</td>
+                  <td className="py-2">{new Date(student.registerDate).toLocaleDateString()}</td>
+                  <td className="py-2">
+                    <button className="bg-yellow-400 text-black px-3 py-1 rounded mr-1 hover:bg-yellow-500" onClick={() => handleEdit(student.studentId)}>Edit</button>
+                    <button className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700" onClick={() => handleDelete(student.studentId)}>Delete</button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
-      {/* Pagination */}
-      <div className="pagination">
+      <div className="flex justify-center mt-6">
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={i + 1 === currentPage ? "active" : ""}
+            className={`mx-1 px-4 py-2 border rounded ${i + 1 === currentPage ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
             onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}

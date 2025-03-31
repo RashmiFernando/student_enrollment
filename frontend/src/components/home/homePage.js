@@ -7,6 +7,12 @@ const Home = () => {
 
   return (
     <div className="home-container">
+
+<h1 class="text-10xl font-bold text-blue-500">
+    Hello world!
+  </h1>
+
+
       <h1>Welcome to StudySphere</h1>
       <div className="auth-buttons">
         <a 

@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "../css/addExam.css";
 
 const AddExam = () => {
   const [examName, setExamName] = useState("");
   const [examDate, setExamDate] = useState("");
   const [examDuration, setExamDuration] = useState("");
-  const[examLocation, setExamLocation] = useState("");
+  const [examLocation, setExamLocation] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,10 +14,11 @@ const AddExam = () => {
       examName,
       examDate,
       examDuration: parseInt(examDuration),
-      examLocation
+      examLocation,
     };
 
-    axios.post("http://localhost:5000/api/exam/create", newExam)
+    axios
+      .post("http://localhost:5000/api/exam/create", newExam)
       .then(() => {
         alert("Exam added successfully!");
         setExamName("");
@@ -33,42 +33,51 @@ const AddExam = () => {
   };
 
   return (
-    <div className="add-exam-container">
-      <h2>Add New Exam</h2>
-      <form className="add-exam-form" onSubmit={handleSubmit}>
-        <label>Exam Name</label>
+    <div className="max-w-md mx-auto mt-12 p-8 bg-gray-100 rounded-xl shadow-lg">
+      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Add New Exam</h2>
+      <form className="flex flex-col" onSubmit={handleSubmit}>
+        <label className="mb-1 font-medium">Exam Name</label>
         <input
           type="text"
           value={examName}
           onChange={(e) => setExamName(e.target.value)}
           required
+          className="px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <label>Exam Date</label>
+        <label className="mb-1 font-medium">Exam Date</label>
         <input
           type="date"
           value={examDate}
           onChange={(e) => setExamDate(e.target.value)}
           required
+          className="px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <label>Exam Duration (minutes)</label>
+        <label className="mb-1 font-medium">Exam Duration (minutes)</label>
         <input
-        type="number"
-        value={examDuration}
-        onChange={(e) => setExamDuration(e.target.value)}
-        required
+          type="number"
+          value={examDuration}
+          onChange={(e) => setExamDuration(e.target.value)}
+          required
+          className="px-4 py-2 mb-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
 
-        <label>Exam Location</label>
+        <label className="mb-1 font-medium">Exam Location</label>
         <input
           type="text"
           value={examLocation}
           onChange={(e) => setExamLocation(e.target.value)}
           required
-
+          className="px-4 py-2 mb-6 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
-        <button type="submit">Add Exam</button>
+
+        <button
+          type="submit"
+          className="bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-300"
+        >
+          Add Exam
+        </button>
       </form>
     </div>
   );

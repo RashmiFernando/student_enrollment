@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "../css/studentDashboard.css";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode"
+import { jwtDecode } from "jwt-decode";
 
 const StudentHome = () => {
-
   const navigate = useNavigate();
   const [student, setStudent] = useState(null);
   const [enrollment, setEnrollments] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
   const [courses, setCourses] = useState([]);
 
-  // 🔐 Get studentId from JWT
   const token = localStorage.getItem("token");
-
   let studentId = null;
 
   if (token) {
@@ -23,14 +19,12 @@ const StudentHome = () => {
   }
 
   useEffect(() => {
-
     if (!studentId) return;
 
     axios
       .get(`http://localhost:5000/student/view/${studentId}`)
       .then((res) => {
         const data = res.data.student || res.data.Student || res.data[0] || res.data;
-        console.log("Student loaded:", data); 
         setStudent(data);
       })
       .catch((err) => console.error("Error fetching student info:", err));
@@ -41,35 +35,34 @@ const StudentHome = () => {
       .catch((err) => console.error("Error fetching enrolled courses:", err));
   }, [studentId]);
 
-  axios
-  .get("http://localhost:5000/course/all")
-  .then((res) => setCourses(res.data.courses))
-  .catch((err) => console.error("Error fetching courses:", err));
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/course/all")
+      .then((res) => setCourses(res.data.courses))
+      .catch((err) => console.error("Error fetching courses:", err));
+  }, []);
 
-  const handleEditDetails = () => {
-    navigate(`/student/edit/${studentId}`);
-  };
+  const handleEditDetails = () => navigate(`/student/edit/${studentId}`);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/login"); 
+    navigate("/login");
   };
 
   const handleEnrollNow = (course) => {
     if (!studentId) return;
-  
+
     const enrollmentData = {
       code: course.code,
       courseName: course.name,
       studentId: studentId,
       enrollmentDate: new Date()
     };
-  
+
     axios
       .post("http://localhost:5000/enrollment/create", enrollmentData)
       .then(() => {
         alert(`Enrolled in ${course.name} successfully!`);
-        
         return axios.get(`http://localhost:5000/enrollment/student-enrollments/${studentId}`);
       })
       .then((res) => setEnrollments(res.data))
@@ -78,95 +71,81 @@ const StudentHome = () => {
         alert("Enrollment failed. Try again.");
       });
   };
-  
 
   return (
-    <div className="student-home-container">
-      
-      <header className="student-header">
-        <div className="header-left">
-          <h1 className="brand-logo">StudySphere</h1>
-        </div>
-
-        <button className="logout-button" onClick={handleLogout}>Logout</button>
+    <div className="font-sans bg-gray-100 min-h-screen">
+      <header className="bg-[#002147] text-white px-10 py-5 flex justify-between items-center relative">
+        <h1 className="text-2xl font-bold tracking-wide">StudySphere</h1>
+        <button
+          className="absolute right-10 top-4 bg-orange-600 hover:bg-white text-white hover:text-orange-600 border-2 border-orange-600 px-4 py-2 rounded-lg font-bold transition"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
       </header>
 
       {student && (
-        <div className="welcome-message">
-          <h2>Welcome {student.name}</h2>
+        <div className="mx-10 mt-5">
+          <h2 className="text-left font-medium italic ">Welcome {student.name}</h2>
         </div>
       )}
 
-      {/* Navigation */}
-      <nav className="student-navbar">
-        <button
-          className={`nav-btn ${selectedSection === "home" ? "active" : ""}`}
-          onClick={() => setSelectedSection("home")}
-        >
-          Home
-        </button>
-        <button
-          className={`nav-btn ${selectedSection === "personal" ? "active" : ""}`}
-          onClick={() => setSelectedSection("personal")}
-        >
-          Personal Info
-        </button>
-
-        <button
-          className={`nav-btn ${selectedSection === "enroll" ? "active" : ""}`}
-          onClick={() => setSelectedSection("enroll")}>
-            Enroll to New Course
-        </button>
-
-        <button className="nav-btn">Registration</button>
-        <button className="nav-btn">Exams</button>
+      <nav className="flex gap-4 px-10 py-3 bg-gray-200">
+        {['home', 'personal', 'enroll', 'time-table', 'exam'].map((section) => (
+          <button
+            key={section}
+            className={`px-4 py-2 rounded-md font-medium ${selectedSection === section ? 'bg-yellow-400 text-black' : 'bg-orange-600 text-white hover:bg-orange-800'}`}
+            onClick={() => setSelectedSection(section)}
+          >
+            {section === 'home' ? 'Home' :
+             section === 'personal' ? 'Personal Info' :
+             section === 'enroll' ? 'Enroll to New Course' :
+             section === 'time-table' ? 'Time Table' :
+             'Exams'}
+          </button>
+        ))}
       </nav>
 
-      {/* HOME SECTION */}
       {selectedSection === "home" && (
-        <>
-          <div className="student-notice">
+        <div className="px-10 py-5">
+          <div className="mb-4 p-4 bg-green-100 border-l-4 border-green-600 text-green-700 font-medium rounded-md">
             Current Calendar Period Registration Details Only
-          </div>         
-
-          <div className="course-section">
-            <h3>My Current Registered Courses</h3>
-            <table className="course-table">
-              <thead>
-                <tr>
-                  <th>Course ID</th>
-                  <th>Course Name</th>
-                  <th>Status</th>
-                  <th>Enrollment Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                { enrollment.length === 0 ? (
-                  <tr>
-                    <td colSpan="4">No courses enrolled.</td>
-                  </tr>
-                ) : (
-                  enrollment.map((enrollment, idx) => (
-                    <tr key={idx}>
-                      <td>{enrollment.code}</td>
-                      <td>{enrollment.courseName}</td>
-                      <td>{enrollment.status}</td>
-                      <td>{new Date(enrollment.enrollmentDate).toLocaleDateString()}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
           </div>
-        </>
+
+          <h3 className="mb-4 text-xl font-semibold text-gray-700">My Current Registered Courses</h3>
+          <table className="w-full bg-white shadow-md border border-gray-300">
+            <thead className="text-white">
+              <tr>
+                <th className="p-3 border bg-orange-700">Course ID</th>
+                <th className="p-3 border bg-orange-700">Course Name</th>
+                <th className="p-3 border bg-orange-700">Status</th>
+                <th className="p-3 border bg-orange-700">Enrollment Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {enrollment.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="text-center py-4">No courses enrolled.</td>
+                </tr>
+              ) : (
+                enrollment.map((enr, idx) => (
+                  <tr key={idx} className="hover:bg-orange-50">
+                    <td className="p-3 border text-center">{enr.code}</td>
+                    <td className="p-3 border text-center">{enr.courseName}</td>
+                    <td className="p-3 border text-center">{enr.status}</td>
+                    <td className="p-3 border text-center">{new Date(enr.enrollmentDate).toLocaleDateString()}</td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       )}
 
-      {/* PERSONAL INFO SECTION */}
       {selectedSection === "personal" && student && (
-        <div className="personal-info-section">
-          <h3>Student Personal Information</h3>
-
-          <div className="personal-info-card">
+        <div className="px-10 py-5">
+          <h3 className="mb-4 text-xl font-semibold text-gray-700">Student Personal Information</h3>
+          <div className="bg-white p-6 rounded-lg shadow-md text-base leading-relaxed">
             <p><strong>Student ID:</strong> {student.studentId}</p>
             <p><strong>Name:</strong> {student.name}</p>
             <p><strong>Email:</strong> {student.email}</p>
@@ -175,43 +154,40 @@ const StudentHome = () => {
             <p><strong>Username:</strong> {student.username}</p>
             <p><strong>Registered Date:</strong> {new Date(student.registerDate).toLocaleDateString()}</p>
           </div>
-
-          <button 
-              className="edit-details-btn"
-              onClick={handleEditDetails}>
-                Edit My Details
+          <button
+            onClick={handleEditDetails}
+            className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+          >
+            Edit My Details
           </button>
         </div>
       )}
 
-      {/* ENROLL SECTION */}
       {selectedSection === "enroll" && (
-        <div className="enroll-section">
-          <h3>Available Courses</h3>
-          <table className="course-table">
-            <thead>
+        <div className="px-10 py-5">
+          <h3 className="mb-4 text-xl font-semibold text-gray-700">Available Courses</h3>
+          <table className="w-full bg-white shadow-md border border-gray-300">
+            <thead className="text-white">
               <tr>
-                <th>Course Code</th>
-                <th>Course Name</th>
-                <th>Lecturer</th>
-                <th>Actions</th>
+                <th className="p-3 border bg-orange-700">Course Code</th>
+                <th className="p-3 border bg-orange-700">Course Name</th>
+                <th className="p-3 border bg-orange-700">Lecturer</th>
+                <th className="p-3 border bg-orange-700">Actions</th>
               </tr>
             </thead>
             <tbody>
               {courses.length === 0 ? (
-                <tr>
-                  <td colSpan="4">No courses found.</td>
-                </tr>
+                <tr><td colSpan="4" className="text-center py-4">No courses found.</td></tr>
               ) : (
                 courses.map((course, idx) => (
-                  <tr key={idx}>
-                    <td>{course.code}</td>
-                    <td>{course.name}</td>
-                    <td>{course.assignedlecturer}</td>
-                    <td>
+                  <tr key={idx} className="hover:bg-orange-50">
+                    <td className="p-3 border text-center">{course.code}</td>
+                    <td className="p-3 border text-center">{course.name}</td>
+                    <td className="p-3 border text-center">{course.assignedlecturer}</td>
+                    <td className="p-3 border text-center">
                       <button
-                        className="enroll-now-btn"
                         onClick={() => handleEnrollNow(course)}
+                        className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium"
                       >
                         Enroll Now
                       </button>
@@ -224,9 +200,49 @@ const StudentHome = () => {
         </div>
       )}
 
+      {selectedSection === "time-table" && (
+        <div className="px-10 py-5">
+          <h3 className="mb-4 text-xl font-semibold text-gray-700">Student Lecture Time Table</h3>
+          <table className="w-full bg-white shadow-md border border-gray-300">
+            <thead className="text-white">
+              <tr>
+                <th className="p-3 border bg-orange-700">Course Code</th>
+                <th className="p-3 border bg-orange-700">Course Name</th>
+                <th className="p-3 border bg-orange-700">Date & Time</th>
+                <th className="p-3 border bg-orange-700">Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan="4" className="text-center py-4">Sample data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
 
+      {selectedSection === "exam" && (
+        <div className="px-10 py-5">
+          <h3 className="mb-4 text-xl font-semibold text-gray-700">Student Exam Time Table</h3>
+          <table className="w-full bg-white shadow-md border border-gray-300">
+            <thead className="bg-orange-600 text-white">
+              <tr>
+                <th className="p-3 border bg-orange-700">Course Code</th>
+                <th className="p-3 border bg-orange-700">Course Name</th>
+                <th className="p-3 border bg-orange-700">Date & Time</th>
+                <th className="p-3 border bg-orange-700">Exam Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan="4" className="text-center py-4">Sample data</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
 
-export default StudentHome; 
+export default StudentHome;

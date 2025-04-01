@@ -13,7 +13,6 @@ import ViewAllStudents from "./components/student/viewAllStudents";
 
 import AddExam from "./components/exam/addExam";
 
-
 import "./App.css";
 
 function App() {
@@ -29,9 +28,8 @@ function App() {
           <Route path="/student-dashboard" element={<StudentDashboard />} />
           <Route path="/student/edit/:id" element={<EditStudent />} />
 
-
           <Route path="/students" element={<ViewAllStudents />} />
-                    
+
           <Route path="/exam/add" element={<AddExam />} />
           
         </Routes>

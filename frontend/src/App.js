@@ -11,8 +11,6 @@ import EditStudent from "./components/student/studentUserProfile";
 
 import ViewAllStudents from "./components/student/viewAllStudents";
 
-import CourseEnroll from './components/enrollment/courseEnroll';
-
 import AddExam from "./components/exam/addExam";
 
 
@@ -33,10 +31,7 @@ function App() {
 
 
           <Route path="/students" element={<ViewAllStudents />} />
-          
-
-          <Route path="/course-enroll" exact element={<CourseEnroll />} />  
-          
+                    
           <Route path="/exam/add" element={<AddExam />} />
           
         </Routes>

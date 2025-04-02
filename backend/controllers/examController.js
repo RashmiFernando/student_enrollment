@@ -74,7 +74,7 @@ const rescheduleExam = async (req, res) => {
     const examId = req.params.id;
     const { code, examName, examDate, examDuration } = req.body;
 
-    const updatedExam = await examModel.findByIdAndDelete(
+    const updatedExam = await examModel.findByIdAndUpdate(
       examId,
       { code, examName, examDate, examDuration },
       { new: true }
@@ -97,7 +97,7 @@ const deleteExam = async (req, res) => {
   try {
     const examId = req.params.id;
 
-    const deletedExam = await examModel.findOneAndDelete({ examId });
+    const deletedExam = await examModel.findByIdAndDelete( examId );
 
     if (!deletedExam) {
       return res.status(404).json({ message: "Exam not found" });

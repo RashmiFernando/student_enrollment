@@ -117,7 +117,7 @@ const AddExam = () => {
         <div>
           <label className="block mb-1 font-medium text-gray-700">Exam Duration (minutes)</label>
           <input
-            type="number"
+            type="text"
             value={examDuration}
             onChange={(e) => setExamDuration(e.target.value)}
             required

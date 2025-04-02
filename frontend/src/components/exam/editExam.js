@@ -56,12 +56,12 @@ const EditExam = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-10 text-blue-500">Loading exam data...</div>;
+    return <div className="text-center mt-10 text-orange-500">Loading exam data...</div>;
   }
 
   return (
     <div className="max-w-md mx-auto mt-12 p-8 bg-white rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">Edit Exam</h2>
+      <h2 className="text-2xl font-bold text-center text-orange-700 mb-6">Edit Exam</h2>
       <form className="flex flex-col" onSubmit={handleSubmit}>
         <label className="mb-1 font-medium">Course Code</label>
         <input
@@ -105,7 +105,7 @@ const EditExam = () => {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition"
+          className="bg-orange-600 text-white font-semibold py-2 rounded-md hover:bg-orange-700 transition"
         >
           Update Exam
         </button>

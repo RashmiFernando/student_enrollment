@@ -21,7 +21,7 @@ const ViewExam = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="text-center mt-10 text-blue-600 text-lg font-medium">Loading exam details...</div>;
+    return <div className="text-center mt-10 text-orange-600 text-lg font-medium">Loading exam details...</div>;
   }
 
   if (!exam) {
@@ -30,7 +30,7 @@ const ViewExam = () => {
 
   return (
     <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-xl shadow-lg border border-gray-200">
-      <h2 className="text-2xl font-bold text-center text-blue-700 mb-6">Exam Details</h2>
+      <h2 className="text-2xl font-bold text-center text-orange-700 mb-6">Exam Details</h2>
 
       <div className="text-gray-700 space-y-3">
         <p><strong>Exam ID:</strong> {exam.examId || "N/A"}</p>

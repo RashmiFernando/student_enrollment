@@ -128,16 +128,16 @@ const ViewAllStudents = () => {
 
       <div className="overflow-x-auto">
         <table className="w-full bg-white shadow-md rounded border border-gray-300">
-          <thead className="bg-blue-600 text-white">
+          <thead className="bg-orange-600 text-white">
             <tr>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("studentId")}>Student ID</th>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("name")}>Name</th>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("email")}>Email</th>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("phone")}>Phone</th>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("address")}>Address</th>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("username")}>Username</th>
-              <th className="px-4 py-2 bg-blue-700" onClick={() => handleSort("registerDate")}>Registered Date</th>
-              <th className="px-4 py-2 bg-blue-700">Actions</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("studentId")}>Student ID</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("name")}>Name</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("email")}>Email</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("phone")}>Phone</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("address")}>Address</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("username")}>Username</th>
+              <th className="px-4 py-2 bg-orange-700" onClick={() => handleSort("registerDate")}>Registered Date</th>
+              <th className="px-4 py-2 bg-orange-700">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -145,7 +145,7 @@ const ViewAllStudents = () => {
               <tr><td colSpan="8" className="text-center py-4">No students found.</td></tr>
             ) : (
               currentStudents.map((student, idx) => (
-                <tr key={idx} className="text-center even:bg-gray-100 hover:bg-blue-50">
+                <tr key={idx} className="text-center even:bg-gray-100 hover:bg-orange-50">
                   <td className="py-2">{student.studentId}</td>
                   <td className="py-2">{student.name}</td>
                   <td className="py-2">{student.email}</td>
@@ -168,7 +168,7 @@ const ViewAllStudents = () => {
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={`mx-1 px-4 py-2 border rounded ${i + 1 === currentPage ? "bg-blue-600 text-white" : "bg-white text-blue-600 border-blue-600"}`}
+            className={`mx-1 px-4 py-2 border rounded ${i + 1 === currentPage ? "bg-orange-600 text-white" : "bg-white text-orange-600 border-orange-600"}`}
             onClick={() => setCurrentPage(i + 1)}
           >
             {i + 1}

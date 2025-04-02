@@ -43,13 +43,13 @@ const ViewAllExams = () => {
 
   return (
     <div className="p-8">
-      <h2 className="text-2xl font-bold text-center text-blue-800 mb-6">
+      <h2 className="text-2xl font-bold text-center text-orange-800 mb-6">
         All Exam Details
       </h2>
 
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200 shadow-md rounded-lg overflow-hidden">
-          <thead className="bg-blue-600 text-white">
+          <thead className="bg-orange-600 text-white">
             <tr>
               <th className="px-4 py-3 text-left">Exam ID</th>
               <th className="px-4 py-3 text-left">Course Code</th>

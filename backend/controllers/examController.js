@@ -1,110 +1,122 @@
 const examModel = require('../models/exam');
+const Enrollment = require('../models/enrollment'); // Import enrollment model
 
-//create a new exam
+// Create a new exam
 const createExam = async (req, res) => {
-    try {
-        const { code, examName, examDate, examDuration, examLocation } = req.body;
+  try {
+    const { code, examName, examDate, examDuration } = req.body;
 
-        if(!code || !examName || !examDate || !examDuration || !examLocation) {
-            return res.status(400).json({ message: "Please provide all exam fields" });
-        }
-
-        const createdExam = new examModel({
-            code,
-            examName,
-            examDate,
-            examDuration,
-            examLocation
-        });
-
-        if (!createdExam) {
-            return res.status(400).json({ message: "Failed to create exam." });
-        }
-
-        const savedExam = await createdExam.save();
-
-        res.status(201).json({ message: "Exam created successfully", savedExam });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "An error occurred while creating the exam.", error: err.message });
+    // Validate input
+    if (!code || !examName || !examDate || !examDuration) {
+      return res.status(400).json({ message: "Please provide all required fields" });
     }
-}
 
+    // Get the student count for the given course code
+    const studentCount = await Enrollment.countDocuments({ code });
 
-//get all exams
+    // Create new exam document
+    const newExam = new examModel({
+      code,
+      examName,
+      examDate,
+      examDuration,
+      studentCount,
+    });
+
+    const savedExam = await newExam.save();
+
+    res.status(201).json({ message: "Exam created successfully", savedExam });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "An error occurred while creating the exam.", error: err.message });
+  }
+};
+
+// View all exams
 const viewAllExams = async (req, res) => {
-    try {
-        const allExams = await examModel.find();
+  try {
+    const allExams = await examModel.find();
 
-        if (!allExams) {
-            return res.status(404).json({ message: "No exams are available." });
-        }
-
-        res.status(200).json({ message: "Exams :", allExams });
-
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Error when fetching exams..", error: err.message });
+    if (!allExams || allExams.length === 0) {
+      return res.status(404).json({ message: "No exams are available." });
     }
-}
 
+    res.status(200).json({ message: "Exams fetched successfully", allExams });
 
-//get one exam
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching exams", error: err.message });
+  }
+};
+
+// View one exam
 const viewOneExam = async (req, res) => {
-    try {
-        const examId = req.params.id;
+  try {
+    const examId = req.params.id;
+    const exam = await examModel.findById(examId );
 
-        const exam = await examModel.findOne({ examId });
-
-        return res.status(200).json({ message: "Exam Details : ", exam });
-
-    } catch (err) {
-        console.log(err);
-        return res.status(500).json({ message: "Error when fetching exam..", error: err.message });
+    if (!exam) {
+      return res.status(404).json({ message: "Exam not found" });
     }
-}
 
+    res.status(200).json({ message: "Exam details", exam });
 
-//rescedule examn
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching exam", error: err.message });
+  }
+};
+
+// Reschedule exam
 const rescheduleExam = async (req, res) => {
-    try {
-        const { examName, examDate, examDuration } = req.body;
+  try {
+    const examId = req.params.id;
+    const { code, examName, examDate, examDuration } = req.body;
 
-        const examId = req.params.id; 
+    const updatedExam = await examModel.findByIdAndDelete(
+      examId,
+      { code, examName, examDate, examDuration },
+      { new: true }
+    );
 
-        const resceduledExam = await examModel.findOneAndUpdate(
-            { examId },
-            { code, examName, examDate, examDuration, examLocation},
-            { new: true }
-        );
-        
-        return res.status(200).json({ message: "Exam resceduled successfully", resceduledExam });
-
-    } catch (err) {
-        console.log(err);
-        res.status(500).json({ message: "An error occurred while resceduling the exam." })
+    if (!updatedExam) {
+      return res.status(404).json({ message: "Exam not found" });
     }
-}
 
+    res.status(200).json({ message: "Exam rescheduled successfully", updatedExam });
 
-//delete exam
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error rescheduling exam", error: err.message });
+  }
+};
+
+// Delete exam
 const deleteExam = async (req, res) => {
-    try {
-        const examId = req.params.id;
+  try {
+    const examId = req.params.id;
 
-        const deletedExam = await examModel.findOneAndDelete({ examId });
+    const deletedExam = await examModel.findOneAndDelete({ examId });
 
-        if (!deletedExam) {
-            return res.status(400).json({ message: "Failed to delete exam." });
-        }
-
-        res.status(200).json({ message: "Exam deleted successfully", deletedExam });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "An error occurred while deleting the exam.", error: err.message });
+    if (!deletedExam) {
+      return res.status(404).json({ message: "Exam not found" });
     }
-}
 
-module.exports = { createExam, viewAllExams, viewOneExam, rescheduleExam, deleteExam }; 
+    res.status(200).json({ message: "Exam deleted successfully", deletedExam });
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error deleting exam", error: err.message });
+  }
+};
+
+
+
+module.exports = {
+  createExam,
+  viewAllExams,
+  viewOneExam,
+  rescheduleExam,
+  deleteExam
+};

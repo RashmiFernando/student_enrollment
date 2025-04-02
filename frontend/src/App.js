@@ -12,6 +12,9 @@ import EditStudent from "./components/student/studentUserProfile";
 import ViewAllStudents from "./components/student/viewAllStudents";
 
 import AddExam from "./components/exam/addExam";
+import ViewExam from "./components/exam/viewExam";
+import ViewAllExams from "./components/exam/viewAllExams";
+import EditExam from "./components/exam/editExam";
 
 import "./App.css";
 
@@ -31,7 +34,13 @@ function App() {
           <Route path="/students" element={<ViewAllStudents />} />
 
           <Route path="/exam/add" element={<AddExam />} />
+          <Route path="/exam/view/:id" element={<ViewExam />} />
+          <Route path="/exam/all" element={<ViewAllExams />} />
+
+          <Route path="/exam/edit/:id" element={<EditExam />} />
+
           
+          {/* Redirect to home if no route matches */}
         </Routes>
       </div>
     </Router>

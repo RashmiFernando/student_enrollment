@@ -47,7 +47,7 @@ const ViewAllStudents = () => {
   };
 
   const handleExportExcel = () => {
-    const studentsWithoutPasswords = filteredStudents.map(({ password, ...rest }) => rest); // Exclude password
+    const studentsWithoutPasswords = filteredStudents.map(({ password, ...rest }) => rest); 
     const worksheet = XLSX.utils.json_to_sheet(studentsWithoutPasswords);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Students");

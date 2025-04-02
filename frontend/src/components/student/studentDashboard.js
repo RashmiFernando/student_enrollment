@@ -9,6 +9,7 @@ const StudentHome = () => {
   const [enrollment, setEnrollments] = useState([]);
   const [selectedSection, setSelectedSection] = useState("home");
   const [courses, setCourses] = useState([]);
+  const [exams, setExams] = useState([]);
 
   const token = localStorage.getItem("token");
   let studentId = null;
@@ -29,13 +30,19 @@ const StudentHome = () => {
       })
       .catch((err) => console.error("Error fetching student info:", err));
 
-    axios
+      axios
       .get(`http://localhost:5000/enrollment/student-enrollments/${studentId}`)
       .then((res) => setEnrollments(res.data))
       .catch((err) => console.error("Error fetching enrolled courses:", err));
-  }, [studentId]);
 
-  useEffect(() => {
+      axios
+        .get(`http://localhost:5000/exam/student-exams/${studentId}`)
+        .then((res) => setExams(res.data.exams || res.data))
+        .catch((err) => console.error("Error fetching exams:", err));
+    }, [studentId]);
+
+
+    useEffect(() => {
     axios
       .get("http://localhost:5000/course/all")
       .then((res) => setCourses(res.data.courses))
@@ -71,6 +78,8 @@ const StudentHome = () => {
         alert("Enrollment failed. Try again.");
       });
   };
+
+
 
   return (
     <div className="font-sans bg-gray-100 min-h-screen">
@@ -221,6 +230,7 @@ const StudentHome = () => {
         </div>
       )}
 
+
       {selectedSection === "exam" && (
         <div className="px-10 py-5">
           <h3 className="mb-4 text-xl font-semibold text-gray-700">Student Exam Time Table</h3>
@@ -234,13 +244,27 @@ const StudentHome = () => {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan="4" className="text-center py-4">Sample data</td>
-              </tr>
+              {exams.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="text-center py-4">No exams scheduled.</td>
+                </tr>
+              ) : (
+                exams.map((exam, index) => (
+                  <tr key={index} className="hover:bg-orange-50">
+                    <td className="p-3 border text-center">{exam.code}</td>
+                    <td className="p-3 border text-center">{exam.examName}</td>
+                    <td className="p-3 border text-center">
+                      {new Date(exam.examDate).toLocaleDateString()} at XX.XX
+                    </td>
+                    <td className="p-3 border text-center">XX</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
-      )}
+      )}``    
+      
     </div>
   );
 };

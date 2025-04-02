@@ -37,10 +37,8 @@ function App() {
           <Route path="/exam/view/:id" element={<ViewExam />} />
           <Route path="/exam/all" element={<ViewAllExams />} />
 
-          <Route path="/exam/edit/:id" element={<EditExam />} />
+          <Route path="/exam/edit/:id" element={<EditExam />} />        
 
-          
-          {/* Redirect to home if no route matches */}
         </Routes>
       </div>
     </Router>

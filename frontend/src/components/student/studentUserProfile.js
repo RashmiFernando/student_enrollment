@@ -121,7 +121,7 @@ const EditStudent = () => {
 
   return (
     <div className="max-w-xl mx-auto my-12 bg-white shadow-lg rounded-xl p-8 font-sans">
-      <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Edit Student</h2>
+      <h2 className="text-2xl font-bold text-center text-orange-800 mb-6">Edit Student</h2>
 
       <h3 className="text-lg font-semibold text-gray-700 mb-4">Student Information</h3>
 
@@ -181,7 +181,7 @@ const EditStudent = () => {
 
         <button
           type="submit"
-          className="mt-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+          className="mt-4 py-2 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-700"
         >
           Update Details
         </button>
@@ -218,7 +218,7 @@ const EditStudent = () => {
 
         <button
           type="submit"
-          className="mt-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700"
+          className="mt-4 py-2 bg-orange-600 text-white font-semibold rounded-md hover:bg-orange-700"
         >
           Update Password
         </button>

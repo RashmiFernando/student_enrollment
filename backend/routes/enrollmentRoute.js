@@ -5,5 +5,11 @@ const router = express.Router();
 
 router.post('/create', createEnrollment);
 router.get('/student-enrollments/:studentId', getEnrollmentsByStudent);
+const { getStudentCountByCourse } = require("../controllers/enrollmentController");
+
+router.get("/student-count/:code", getStudentCountByCourse);
+
+module.exports = router;
+
 
 module.exports = router;

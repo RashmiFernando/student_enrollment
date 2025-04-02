@@ -70,7 +70,7 @@ const ViewAllExams = () => {
             ) : (
               exams.map((exam, index) => (
                 <tr key={index} className="border-t hover:bg-gray-50">
-                  <td className="px-4 py-3">{exam._id}</td>
+                  <td className="px-4 py-3">{exam.examId}</td>
                   <td className="px-4 py-3">{exam.code}</td>
                   <td className="px-4 py-3">{exam.examName}</td>
                   <td className="px-4 py-3">

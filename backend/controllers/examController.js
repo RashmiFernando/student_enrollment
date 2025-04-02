@@ -68,6 +68,42 @@ const viewOneExam = async (req, res) => {
   }
 };
 
+
+// view exams for one student
+const viewAllExamsForStudent = async (req, res) => {
+  try {
+    const studentId = req.params.id; 
+
+    const enrollments = await Enrollment.find({ studentId });
+    
+    if (!enrollments || enrollments.length === 0) {
+      return res.status(404).json({ message: "No enrollments found for this student." });
+    }
+
+    const courseCodes = [...new Set(enrollments.map(enrollment => enrollment.code))];
+
+    // Find exams that match any of these course codes
+    const studentExams = await examModel.find({ code: { $in: courseCodes } });
+
+    if (!studentExams || studentExams.length === 0) {
+      return res.status(404).json({ message: "No exams available for your enrolled courses." });
+    }
+
+    res.status(200).json({ 
+      message: "Exams fetched successfully", 
+      exams: studentExams 
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ 
+      message: "Error fetching exams", 
+      error: err.message 
+    });
+  }
+};
+
+
 // Reschedule exam
 const rescheduleExam = async (req, res) => {
   try {
@@ -117,6 +153,7 @@ module.exports = {
   createExam,
   viewAllExams,
   viewOneExam,
+  viewAllExamsForStudent,
   rescheduleExam,
   deleteExam
 };

@@ -11,5 +11,3 @@ router.get("/student-count/:code", getStudentCountByCourse);
 
 module.exports = router;
 
-
-module.exports = router;

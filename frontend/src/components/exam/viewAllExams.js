@@ -32,7 +32,7 @@ const ViewAllExams = () => {
         .delete(`http://localhost:5000/exam/delete/${id}`)
         .then(() => {
           alert("Exam deleted successfully!");
-          fetchExams(); // Refresh list
+          fetchExams();
         })
         .catch((err) => {
           console.error("Delete error:", err);

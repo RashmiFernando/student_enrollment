@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div className="flex flex-col items-center justify-center h-[80vh] bg-gray-100 text-center px-6">
       <h1 className="text-4xl md:text-5xl font-bold text-orange-800 mb-10">
-        Welcome to StudySphere
+        Welcome to StudySphere!!
       </h1>
 
       <div className="flex gap-6">
